@@ -1,0 +1,11 @@
+---
+resource_group: RyuGoo-Saba
+location: japaneast
+storageaccount:
+  name: ryugoosabadiag
+cidr_prefix: 10.106
+vm_name: ryugoo-saba-master-vm
+vm_size: Standard_D2_v3
+gb_size: 32
+username: ryugoo
+authorized_keys: hash_value

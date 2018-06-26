@@ -1,0 +1,9 @@
+FROM python:3.6.5-slim-stretch
+
+WORKDIR /opt/RyuGoo-Saba/SabaWorker
+COPY ./requirements.txt /opt/RyuGoo-Saba/SabaWorker/
+RUN pip3 install --no-cache-dir -r requirements.txt
+
+COPY /opt/RyuGoo-Saba/SabaWorker/pySabaWorker /opt/RyuGoo-Saba/SabaWorker/
+
+CMD ["tail", "-f", "/dev/null"]

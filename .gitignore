@@ -3,5 +3,11 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# === SabaCLI ===
 SabaCLI/config/
-SavaCLI/pySabaCLI/config.py
+SabaCLI/pySabaCLI/config.py
+SabaCLI/ansible-master/**/*.retry
+SabaCLI/ansible-master/vars_files/master-config.yml
+
+# === SabaMaster ===
+SabaMaster/ssl_certification/

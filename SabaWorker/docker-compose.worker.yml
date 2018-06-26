@@ -1,0 +1,63 @@
+version: '3'
+services:
+  api_server:
+    image: saba_worker/api_server
+    build:
+      context: .
+      dockerfile: Dockerfile-api_server
+    restart: always
+    tty: true
+    ports:
+      - "8080:8080"
+    environment:
+      PYTHONPATH: "/opt/RyuGoo-Saba/SabaWorker"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/volumes:/var/lib/docker/volumes
+      - worker_input:/data/worker_input
+    links:
+      - redis
+    depends_on:
+      - redis
+      - cwltool
+      - sratoolkit
+      - azure_cli
+    command: ["python3", "/opt/saba_worker/pySabaWorker/app.py"]
+  redis:
+    image: redis:4.0.9-alpine
+    restart: always
+    tty: true
+    expose:
+      - "6379"
+    volumes:
+      - redis_data:/data
+  cwltool:
+    image: saba_worker/cwltool
+    build:
+      context: .
+      dockerfile: Dockerfile-cwltool
+    restart: always
+    tty: true
+    volumes:
+      - worker_input:/data/worker_input
+      - worker_output:/data/worker_output
+  sratoolkit:
+    image: saba_worker/sratoolkit
+    build:
+      context: .
+      dockerfile: Dockerfile-sratoolkit
+    restart: always
+    tty: true
+    volumes:
+      - worker_input:/data/worker_input
+  azure_cli:
+    image: microsoft/azure-cli:latest
+    restart: always
+    tty: true
+    volumes:
+      - worker_output:/data/worker_output
+
+volumes:
+  worker_input:
+  worker_output:
+  redis_data:

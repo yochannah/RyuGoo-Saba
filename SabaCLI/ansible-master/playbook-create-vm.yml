@@ -1,0 +1,9 @@
+---
+- name: create azure virtual machine
+  hosts: localhost
+  connection: local
+  vars_files:
+    - vars_files/master-config.yml
+  roles:
+    - role: create-vm
+    - role: ssh-config

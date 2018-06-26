@@ -1,0 +1,8 @@
+---
+- name: Get public ip
+  shell: az network public-ip list --resource-group {{ resource_group }} --query "[?name=='{{ resource_group }}-master-ip']" | jq -rc .[].ipAddress
+  register: master_ip_address
+- name: Add .ssh/config
+  template: owner=root group=root src=master.conf.j2 dest=/root/.ssh/config mode=600
+- name: test connection
+  script: ./script/wait_ssh_connection.sh {{ vm_name }}

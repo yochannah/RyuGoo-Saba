@@ -1,0 +1,12 @@
+FROM ubuntu:16.04
+
+WORKDIR /root
+RUN apt-get update \
+ && apt-get install -y \
+    curl \
+ && curl https://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/current/sratoolkit.current-ubuntu64.tar.gz -o /root/sratoolkit.current-ubuntu64.tar.gz \
+ && tar zxfv sratoolkit.*-ubuntu64.tar.gz \
+ && cp -r sratoolkit.*-ubuntu64/bin/* /usr/bin \
+ && rm -rf sratoolkit*
+
+CMD ["tail", "-f", "/dev/null"]

@@ -1,0 +1,10 @@
+Host {{ vm_name }}
+    HostName {{ master_ip_address.stdout }}
+    Port 22
+    User {{ username }}
+    IdentityFile /root/.ssh/id_rsa
+    ForwardAgent yes
+    ServerAliveInterval 60
+    TCPKeepAlive yes
+    IdentitiesOnly yes
+    StrictHostKeyChecking no

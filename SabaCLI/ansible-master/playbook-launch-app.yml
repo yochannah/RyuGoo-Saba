@@ -1,0 +1,8 @@
+---
+- name: launch app server
+  hosts: ryugoo-saba-master-vm
+  become: true
+  vars_files:
+    - vars_files/master-config.yml
+  roles:
+    - role: prepare-master

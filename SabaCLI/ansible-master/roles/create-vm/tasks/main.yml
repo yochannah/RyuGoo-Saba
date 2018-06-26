@@ -1,0 +1,106 @@
+---
+- name: Create resource group
+  azure_rm_resourcegroup:
+    name: "{{ resource_group }}"
+    location: "{{ location }}"
+- name: Create an account
+  azure_rm_storageaccount:
+    resource_group: "{{ resource_group }}"
+    name: "{{ storageaccount.name }}"
+    type: Standard_RAGRS
+- name: Create virtual network
+  azure_rm_virtualnetwork:
+    resource_group: "{{ resource_group }}"
+    name: "{{ item.name }}"
+    address_prefixes: "{{ item.address_prefixes }}"
+  with_items:
+    - name: "{{ resource_group }}-vnet"
+      address_prefixes: "{{ cidr_prefix }}.0.0/16"
+- name: Add subnet
+  azure_rm_subnet:
+    resource_group: "{{ resource_group }}"
+    name: "{{ item.name }}"
+    address_prefix: "{{ item.address_prefix }}"
+    virtual_network: "{{ resource_group }}-vnet"
+  with_items:
+    - name: "{{ resource_group }}-001-subnet"
+      address_prefix: "{{ cidr_prefix }}.1.0/24"
+- name: Add master securitygroup
+  azure_rm_securitygroup:
+      resource_group: "{{ resource_group }}"
+      name: "{{ resource_group }}-master-nsg"
+      purge_rules: yes
+      rules:
+          - name: 'inbound-allow-ssh'
+            protocol: Tcp
+            destination_port_range: 22
+            access: Allow
+            source_address_prefix: '*'
+            priority: 101
+            direction: Inbound
+          - name: 'inbound-allow-http'
+            protocol: Tcp
+            destination_port_range: 80
+            access: Allow
+            source_address_prefix: '*'
+            priority: 102
+            direction: Inbound
+          - name: 'inbound-allow-https'
+            protocol: Tcp
+            destination_port_range: 443
+            access: Allow
+            source_address_prefix: '*'
+            priority: 103
+            direction: Inbound
+- name: Add worker securitygroup
+  azure_rm_securitygroup:
+      resource_group: "{{ resource_group }}"
+      name: "{{ resource_group }}-worker-nsg"
+      purge_rules: yes
+      rules:
+          - name: 'inbound-allow-all'
+            protocol: '*'
+            destination_port_range: '*'
+            access: Allow
+            source_address_prefix: '{{ cidr_prefix }}.0.0/16'
+            priority: 101
+            direction: Inbound
+- name: Add public ip
+  azure_rm_publicipaddress:
+    resource_group: "{{ resource_group }}"
+    name: "{{ resource_group }}-master-ip"
+    allocation_method: Static
+- name: Create a network interface
+  azure_rm_networkinterface:
+    name: "{{ vm_name }}-nic"
+    resource_group: "{{ resource_group }}"
+    virtual_network_name: "{{ resource_group }}-vnet"
+    subnet_name: "{{ resource_group }}-001-subnet"
+    security_group: "{{ resource_group }}-master-nsg"
+    ip_configurations:
+      - name: ipconfig1
+        public_ip_address_name: "{{ resource_group }}-master-ip"
+        primary: True
+- name: Create virtual machine
+  azure_rm_virtualmachine:
+    resource_group: "{{ resource_group }}"
+    name: "{{ vm_name }}"
+    vm_size: "{{ vm_size }}"
+    admin_username: "{{ username }}"
+    ssh_password_enabled: false
+    ssh_public_keys:
+      - path: "/home/{{ username }}/.ssh/authorized_keys"
+        key_data: "{{ authorized_keys }}"
+    image:
+      offer: UbuntuServer
+      publisher: Canonical
+      sku: '16.04.0-LTS'
+      version: '16.04.201805220'
+    network_interface_names:  "{{ vm_name }}-nic"
+    managed_disk_type: Standard_LRS
+    os_disk_caching: ReadWrite
+    os_type: Linux
+    started: yes
+    allocated: yes
+- name: Resize managed disk
+  script: ./script/resize_virtualmachine.sh {{ resource_group }} {{ vm_name }} {{ gb_size }}

@@ -1,0 +1,30 @@
+FROM python:2.7.15-slim-stretch
+
+ENV DEBCONF_NOWARNINGS yes
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg2 \
+    software-properties-common \
+    apt-utils
+
+# install nodejs, docker
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - \
+ && curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - \
+ && add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable" \
+ && apt-get update \
+ && apt-get install -y \
+    nodejs \
+    docker-ce
+
+RUN pip install \
+    cwlref-runner \
+    cwltool
+
+WORKDIR /cwltool
+
+CMD ["tail", "-f", "/dev/null"]

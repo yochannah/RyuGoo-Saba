@@ -1,0 +1,17 @@
+# === CLI config ===
+DEBUG = True
+
+# === Azure config ===
+STORAGEACCOUNT = "ryugoosabadiag"
+CIDR_PREFIX = "10.106"
+LOCATION = "japaneast"
+
+# === Master VM config ===
+MASTER_VM_NAME = "ryugoo-saba-master-vm"
+MASTER_INSTANCE_SIZE = "Standard_D2_v3"
+MASTER_DISK_SIZE = 32   # GB
+
+# === Worker VM config ===
+WORKER_VM_NAME_PREFEX = "ryugoo-saba-worker-vm"
+WORKER_DEFAULT_INSTANCE_SIZE = "Standard_D2_v3"
+WORKER_DEFAULT_DISK_SIZE = 256   # GB

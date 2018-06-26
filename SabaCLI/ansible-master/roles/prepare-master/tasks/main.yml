@@ -1,0 +1,65 @@
+---
+# === Communication confirmation ===
+- name: ping
+  ping:
+# === Install Package ===
+- name: Add an Apt signing key, uses docker-ce key is at the URL
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+- name: Add the Docker repository
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable test edge"
+    state: present
+    mode: 0644
+- name: Run the equivalent of "apt-get update" as a separate step
+  apt:
+    update_cache: yes
+- apt: name={{item.name}} state=present
+  with_items:
+    - name: "docker-ce=18.*"
+    - name: git
+- name: Add the Docker Compose
+  get_url:
+    url: https://github.com/docker/compose/releases/download/1.21.2/docker-compose-Linux-x86_64
+    dest: /usr/local/bin/docker-compose
+    mode: 0755
+- name: user join to docker group
+  user:
+    name: ryugoo
+    groups: docker
+    append: yes
+# === Clone Git repository ===
+- name: Create RyuGoo-Saba dir
+  file: path=/opt/RyuGoo-Saba
+        state=directory
+        owner=ryugoo
+        group=ryugoo
+        mode=777
+- name: git clone RyuGoo-Saba
+  become_user: ryugoo
+  git:
+    repo: https://github.com/Rhelixa-inc/RyuGoo-Saba.git
+    dest: "/opt/RyuGoo-Saba"
+    version: master
+- name: Create ssl certification dir
+  file: path=/opt/RyuGoo-Saba/SabaMaster/ssl_certification
+        state=directory
+        owner=ryugoo
+        group=ryugoo
+        mode=755
+  copy: src=../config/ca.key
+        dest=/opt/RyuGoo-Saba/SabaMaster/ssl_certification/ca.key
+        owner=ryugoo
+        group=ryugoo
+        mode=755
+  copy: src=../config/ca.csr
+        dest=/opt/RyuGoo-Saba/SabaMaster/ssl_certification/ca.csr
+        owner=ryugoo
+        group=ryugoo
+        mode=755
+  copy: src=../config/ca.crt
+        dest=/opt/RyuGoo-Saba/SabaMaster/ssl_certification/ca.crt
+        owner=ryugoo
+        group=ryugoo
+        mode=755

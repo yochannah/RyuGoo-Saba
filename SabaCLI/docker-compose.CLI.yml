@@ -1,0 +1,14 @@
+version: '3'
+services:
+  cli:
+    image: saba-cli/cli
+    build:
+      context: .
+      dockerfile: Dockerfile-CLI
+    restart: always
+    tty: true
+    environment:
+      PYTHONPATH: "/opt/RyuGoo-Saba/SabaCLI"
+    command: ["tail", "-f", "/dev/null"]
+    volumes:
+     - ./config:/opt/RyuGoo-Saba/SabaCLI/config
