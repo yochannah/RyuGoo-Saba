@@ -6,7 +6,7 @@ from pySabaCLI import root_dir
 config_file_path = root_dir.joinpath("pySabaCLI").joinpath("config.py")
 config_file_dist_path = root_dir.joinpath(
     "pySabaCLI").joinpath("config.py-dist")
-if config_file_path.exists is False:
+if config_file_path.exists() is False:
     shutil.copy(str(config_file_dist_path), str(config_file_path))
 
 import click

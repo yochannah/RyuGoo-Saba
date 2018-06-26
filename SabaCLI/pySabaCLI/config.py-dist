@@ -4,12 +4,12 @@ DEBUG = True
 # === Azure config ===
 STORAGEACCOUNT = "ryugoosabadiag"
 CIDR_PREFIX = "10.106"
-LOCATION = "japaneast"
+LOCATION = "eastus2"
 
 # === Master VM config ===
 MASTER_VM_NAME = "ryugoo-saba-master-vm"
 MASTER_INSTANCE_SIZE = "Standard_D2_v3"
-MASTER_DISK_SIZE = 32   # GB
+MASTER_DISK_SIZE = 30   # GB
 
 # === Worker VM config ===
 WORKER_VM_NAME_PREFEX = "ryugoo-saba-worker-vm"
