@@ -14,6 +14,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /var/lib/docker/volumes:/var/lib/docker/volumes
+      - /opt/RyuGoo-Saba/SabaMaster/ssl_certification:/opt/RyuGoo-Saba/SabaMaster/ssl_certification
     links:
       - redis
       - postgres

@@ -4,5 +4,5 @@ WORKDIR /opt/RyuGoo-Saba/SabaMaster
 COPY ./requirements.txt /opt/RyuGoo-Saba/SabaMaster/
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-COPY ./pySabamaster /opt/RyuGoo-Saba/SabaMaster/pySabaMaster
+COPY ./pySabaMaster /opt/RyuGoo-Saba/SabaMaster/pySabaMaster
 CMD ["tail", "-f", "/dev/null"]

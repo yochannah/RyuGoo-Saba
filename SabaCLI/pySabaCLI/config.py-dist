@@ -4,7 +4,7 @@ DEBUG = True
 # === Azure config ===
 STORAGEACCOUNT = "ryugoosabadiag"
 CIDR_PREFIX = "10.106"
-LOCATION = "eastus2"
+LOCATION = "westus2"
 
 # === Master VM config ===
 MASTER_VM_NAME = "ryugoo-saba-master-vm"

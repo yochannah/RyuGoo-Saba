@@ -43,21 +43,28 @@
     dest: "/opt/RyuGoo-Saba"
     version: master
 - name: Create ssl certification dir
+  become_user: ryugoo
   file: path=/opt/RyuGoo-Saba/SabaMaster/ssl_certification
         state=directory
         owner=ryugoo
         group=ryugoo
         mode=755
+- name: Copy ca.key
+  become_user: ryugoo
   copy: src=../config/ca.key
         dest=/opt/RyuGoo-Saba/SabaMaster/ssl_certification/ca.key
         owner=ryugoo
         group=ryugoo
         mode=755
+- name: Copy ca.csr
+  become_user: ryugoo
   copy: src=../config/ca.csr
         dest=/opt/RyuGoo-Saba/SabaMaster/ssl_certification/ca.csr
         owner=ryugoo
         group=ryugoo
         mode=755
+- name: Copy ca.crt
+  become_user: ryugoo
   copy: src=../config/ca.crt
         dest=/opt/RyuGoo-Saba/SabaMaster/ssl_certification/ca.crt
         owner=ryugoo
