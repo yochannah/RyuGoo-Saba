@@ -11,4 +11,6 @@ services:
       PYTHONPATH: "/opt/RyuGoo-Saba/SabaCLI"
     command: ["tail", "-f", "/dev/null"]
     volumes:
-     - ./config:/opt/RyuGoo-Saba/SabaCLI/config
+      - ./config:/opt/RyuGoo-Saba/SabaCLI/config
+      - /opt/RyuGoo-Saba/SabaCLI/pySabaCLI:/opt/RyuGoo-Saba/SabaCLI/pySabaCLI
+      - /opt/RyuGoo-Saba/SabaCLI/ansible-master:/opt/RyuGoo-Saba/SabaCLI/ansible-master

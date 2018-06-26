@@ -21,9 +21,10 @@ RUN echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $(lsb
 WORKDIR /opt/RyuGoo-Saba/SabaCLI
 
 COPY requirements.txt /opt/RyuGoo-Saba/SabaCLI/
-COPY pySabaCLI /opt/RyuGoo-Saba/SabaCLI/
-COPY ansible-master /opt/RyuGoo-Saba/SabaCLI/
 RUN pip3 install --no-cache-dir -r requirements.txt
- && echo 'alias saba="python3 /opt/RyuGoo-Saba/SabaCLI/pySabaCLI"' >> ~/.bashrc
+
+# COPY pySabaCLI /opt/RyuGoo-Saba/SabaCLI/pySabaCLI
+# COPY ansible-master /opt/RyuGoo-Saba/SabaCLI/ansible-master
+RUN echo 'alias saba="python3 /opt/RyuGoo-Saba/SabaCLI/pySabaCLI"' >> ~/.bashrc
 
 CMD ["tail", "-f", "/dev/null"]
